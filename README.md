@@ -45,3 +45,32 @@ Curso de Backend con NestJS
   - [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
   - [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
   - [EditorConfig](https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig)
+
+## Estructura de aplicaciones en NestJS
+  NestJS posee desde el inicio de un proyecto varios directorios y archivos que se generan por defecto al crearlo. Veamos para que te sirve cada uno.
+  
+  ### 1. Node_modules:
+  Todo proyecto de Javascript posee este directorio donde se almacenan las librerías y dependencias que se descarguen con NPM.
+
+  ### 2. SRC:
+  Directorio principal del proyecto donde encontramos:
+
+  - app.controller.spec.ts: archivo de pruebas unitarias del controlador con el mismo nombre.
+  - app.controller.ts: controlador que contiene endpoints a diferentes recursos.
+  - app.module.ts: módulo principal de toda la aplicación NestJS.
+  - app.service.ts: servicio consumido por los controladores para determinados propósitos.
+  - main.ts: archivo Core de la aplicación NestJS donde se realizan configuraciones e imports básicos para su funcionamiento.
+
+  ### 3. Test:
+  Directorio de pruebas unitarias y de integración. NestJS utiliza por defecto Jest para escribir las pruebas.
+
+  - [.editorconfig](https://editorconfig.org/): este archivo no viene por defecto, pero se recomienda crearlo e instalar el plugin con el mismo nombre en el editor. Permite autoformatear los archivos, espacios, indentación, etc.
+  - [.eslintrc.js](https://eslint.org/  ): permite la configuración de un analizador de código para detectar tempranamente errores y resolverlos. Requiere instalación de un plugin en el editor.
+  - .gitignore: indicarle a GIT qué archivos/directorios ignorar.
+  - [.prettierrc](https://prettier.io/): archivo de configuración para el autoformateo de código. Requiere instalación de un plugin en el editor.
+  - nest-cli.json: archivo con configuraciones de NestJS. Algunos plugins del framework requieren de configuraciones adicionales en este archivo.
+  - package-lock.json: describe las dependencias exactas que se generaron en la instalación del proyecto.
+  - package.json: archivo para el manejo de dependencias, scripts y metadatos relevantes para el proyecto.
+  - [README.md](https://changelog.md/): archivo markdown para la documentación del proyecto.
+  - tsconfig.build.json: archivo principal para la configuración de TypeScript.
+  - tsconfig.json: extensión con más configuraciones de TypeScript.
