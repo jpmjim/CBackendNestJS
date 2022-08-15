@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { AppService } from './app.service';
 
 @Controller()
@@ -10,6 +10,7 @@ export class AppController {
     return 'Hola Mundo!';
   }
 
+  //rutas no dinamicas
   @Get('nuevo')
   newEndpoint() {
     return 'yo soy nuevo';
@@ -20,6 +21,12 @@ export class AppController {
     return 'con /sas/';
   }
 
+  @Get('products/filter')
+  getProductFilter() {
+    return `yo soy un filter`;
+  }
+
+  //rutas dinamicas
   @Get('products/:productId')
   getProduct(@Param('productId') productId: string) {
     return `product ${productId}`;
@@ -28,5 +35,14 @@ export class AppController {
   @Get('categories/:id/products/:productId')
   getCategory(@Param('productId') productId: string, @Param('id') id: string) {
     return `product ${productId} and ${id}`;
+  }
+
+  @Get('products')
+  getProducts(
+    @Query('limit') limit = 100,
+    @Query('offset') offset = 0,
+    @Query('brand') brand: string,
+  ) {
+    return `products limit=> ${limit} offset=> ${offset} brand=> ${brand}`;
   }
 }
