@@ -151,3 +151,85 @@ Curso de Backend con NestJS
   }
   const alumno = new Alumno('Freddy', 'Vega');
   ```
+
+## Introducción a controladores
+  El concepto más básico para desarrollar una aplicación con NestJS son los [Controladores](https://docs.nestjs.com/controllers).
+
+  Ejecutamos:
+  ```bash
+  npm run start:dev
+  ```
+  Nos permite ejecutar un server con la caracteristica de liveload, que cada vez que escribamos un codigo se va a reiniciar el server ejecutando los cambios que hayamos hecho.
+  
+  ### Qué son los controladores en NestJS
+  Los Controladores manejarán las rutas o endpoints que la aplicación necesite, además de validar los permisos del usuario, filtro y manipulación de datos.
+
+  ### Estructura de un controlador
+  La aplicación de NestJS creada por defecto con el CLI con el comando <code>nest new project-name</code>  trae consigo un controlador básico con el nombre <code>app.controller.ts</code>. Verás que dicho archivo contiene una clase que a su vez posee un decorador llamado <code>@Controller()</code>.
+
+  Dicho decorador le indica al compilador de NestJS que esta clase tendrá el comportamiento de un controlador.
+  ```typescript
+  // app.controller.ts
+  import { Controller, Get } from '@nestjs/common';
+  import { AppService } from './app.service';
+
+  @Controller()
+  export class AppController {
+
+    constructor(private readonly appService: AppService) {}
+
+    @Get()
+    getHello(): string {
+      return this.appService.getHello();
+    }
+  }
+  ```
+  Los controladores deben ser importados en un módulo para que sean reconocidos los endpoints.
+  ```typescript
+  // app.module.ts
+  import { Module } from '@nestjs/common';
+  import { AppController } from './app.controller';
+
+  @Module({
+    imports: [],
+    controllers: [
+      // Imports de Controladores
+      AppController
+    ],
+  })
+  export class AppModule {}
+  ```
+  El controlador importa un servicio que son los responsables de la lógica y obtención de datos desde una BBDD que el controlador requiere.
+  ```typescript
+  // app.service.ts
+  import { Injectable } from '@nestjs/common';
+
+  @Injectable()
+  export class AppService {
+    getHello(): string {
+      return 'Hello World!';
+    }
+  }
+  ```
+  Puedes correr el servidor de NestJS con el comando <code>npm run start:dev</code> e ingresar a la ruta <code>localhost:3000</code> para visualizar el contenido que el controlador envía.
+
+  Si quieres crear una nueva ruta, basta con crear un método en la clase del controlador y colocarle el decorador <code>@Get()</code> con un nombre para el nuevo endpoint.
+  ```typescript
+  // app.controller.ts
+  @Controller()
+  export class AppController {
+
+    constructor(private readonly appService: AppService) {}
+
+    @Get()
+    getHello(): string {
+      return this.appService.getHello();
+    }
+    
+    @Get('new-endpoint')
+    newEndpoint(): string {
+      return 'New endpoint';
+    }
+  }
+  ```
+  Ingresa a esta nueva ruta desde <code>localhost:3000/new-endpoint</code> para visualizar su respuesta y así crear los endpoints que necesites.
