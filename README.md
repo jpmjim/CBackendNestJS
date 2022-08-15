@@ -74,3 +74,18 @@ Curso de Backend con NestJS
   - [README.md](https://changelog.md/): archivo markdown para la documentación del proyecto.
   - tsconfig.build.json: archivo principal para la configuración de TypeScript.
   - tsconfig.json: extensión con más configuraciones de TypeScript.
+
+## Presentación del proyecto: Platzi Store
+  Para aplicar tus conocimientos de NestJS vas a crear una API ecommerce. El proyecto tendrá todas las entidades que tiene un comercio electrónico. [Repo del Proyecto](https://github.com/platzi/fundamentos-nestjs)
+
+  Entidades del proyecto Platzi Store:
+  - Ordenes de compra
+  - Usuarios
+  - Categorías
+  - Productos
+  - Clientes
+  - Marcas
+
+  La API la podrás consumir desde Android o cualquier aplicación Frontend como Angular, React, etc
+
+  También lograremos tener la documentación de la API REST con Swagger.
