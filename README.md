@@ -89,3 +89,65 @@ Curso de Backend con NestJS
   La API la podrás consumir desde Android o cualquier aplicación Frontend como Angular, React, etc
 
   También lograremos tener la documentación de la API REST con Swagger.
+
+## Repaso a TypeScript: tipos y POO
+  NestJS utiliza TypeScript como lenguaje de programación y conocer sus características y qué le adiciona a Javascript te convertirá en un profesional más completo de esta tecnología.
+
+  **Qué es TypeScript**
+  
+  TypeScript es un lenguaje de programación mantenido por Microsoft. En otras palabras, es un “superconjunto” de Javascript que le agrega tipado de datos y programación orientada a objetos.
+
+  El código fuente escrito en TypeScript, se “transpila” a código Javascript que es el que finalmente entienden los intérpretes de Javascript como los navegadores web o NodeJS.
+
+  **Tipado de Datos con TypeScript**
+
+  Con Javascript puedes crear una variable del tipo String y posteriormente asignarle un valor del tipo Entero o Boolean. Esto es propenso a tener errores en tiempo de ejecución.
+  TypeScript permite tipar los datos para que estos no cambien de tipo.
+  ```typescript
+  // Tipado de datos con TypeScript
+  const text: string;
+  const num: number;
+  const bool: boolean:
+  const arr: Array<number>[];
+  ```
+  Safe type
+  ```typescript
+  let name: string;
+  const age = 19;
+  const suma = (a: number, b:number) => {
+    return a + b;
+  }
+  ```
+  Classes
+  ```typescript
+  class Person {
+   constructor(private age: number, private name: string) {}
+
+    getSummary() {
+      return `I'm ${this.name} and I'm ${this.age}`;
+    }
+  }
+  ```
+  **POO con TypeScript**
+
+  Javascript permite el desarrollo de aplicaciones utilizando POO basada en Prototipos. Puedes tomar el Curso Básico de Programación Orientada a Objetos con JavaScript para entrar en más detalle. TypeScript llega para permitir escribir código utilizando los conceptos de la POO más fácilmente con clases, herencia, polimorfismo, etc. 
+  ```typescript
+  // Programación Orientada a Objetos con TypeScript
+  class Alumno {
+    private nombre: string;
+    private apellido: string;
+    
+    constructor(nombre: string, apellido: string) {
+      this.nombre = nombre;
+      this.apellido = apellido;
+    }
+    
+    getNombre() {
+      return this.nombre;
+    }
+    setNombre(nuevoNombre: string) {
+      this.nombre = nuevoNombre;
+    }
+  }
+  const alumno = new Alumno('Freddy', 'Vega');
+  ```
