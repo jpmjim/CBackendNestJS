@@ -233,3 +233,56 @@ Curso de Backend con NestJS
   }
   ```
   Ingresa a esta nueva ruta desde <code>localhost:3000/new-endpoint</code> para visualizar su respuesta y así crear los endpoints que necesites.
+
+## GET: cómo recibir parámetros
+  Existen diferentes tipos de endpoints que se identifican a través de los Verbos HTTP. Cada uno con un propósito determinado siguiendo el protocolo.
+
+  ### Obtención de datos con GET
+  En particular, el verbo GET suele utilizarse para endpoints que permiten la obtención de datos como un producto o una lista de productos.
+
+  Es frecuente la necesidad de que este tipo de endpoints también reciban información dinámica en las URL como el identificador de un producto.
+
+  Para capturar estos datos en NestJS, tienes que importar el decorador <code>Param</code> desde <code>@nestjs/common</code> y emplearlo de la siguiente manera en tus endpoints.
+  ```typescript
+  import { Controller, Get, Param } from '@nestjs/common';
+  import { AppService } from './app.service';
+
+  @Controller()
+  export class AppController {
+
+    constructor(private readonly appService: AppService) {}
+
+    @Get('product/:idProduct')
+    getProduct1(@Param() params: any): string {
+      return `Producto id: ${params.idProduct}`;
+    }
+
+    @Get('product/:idProduct')
+    getProduct2(@Param('idProduct') idProduct: string): string {
+      return `Producto id: ${idProduct}`;
+    }
+  }
+  ```
+  Observa el decorador <code>@Get()</code> que posee el nombre del endpoint seguido de un <code>:idProduct</code> que identifica al parámetro dinámico. Luego puedes implementar el decorador <code>@Param()</code> para capturar todos los parámetros juntos en un objeto o <code>@Param('idProduct')</code> para capturar únicamente el parámetro con dicho nombre.
+
+  De esta forma, accede en un navegador a <code>localhost:3000/product/12345</code> para capturar ese <code>12345</code> y posteriormente utilizarlo.
+  ```typescript
+  import { ..., Param } from '@nestjs/common';
+  ...
+
+  @Controller()
+  export class AppController {
+    ...
+
+    @Get('products/:productId')
+    getProduct(@Param('productId') productId: string) {
+      return `product ${productId}`;
+    }
+
+    @Get('categories/:id/products/:productId')
+    getCategory(@Param('productId') productId: string, @Param('id') id: string) {
+      return `product ${productId} and ${id}`;
+    }
+  }
+  ```
+  
