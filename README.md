@@ -363,4 +363,95 @@ Curso de Backend con NestJS
   }
   ```
 
+## Separación de responsabilidades
+  NestJS le da mucha importancia a los Principios SOLID en el desarrollo de software para mantener las buenas prácticas de codificación. Una de ellas es la responsabilidad única.
+  - [CLI command reference](https://docs.nestjs.com/cli/usages)
+  - [nest generate](https://docs.nestjs.com/cli/usages#nest-generate)
+  
+  Creamos nuestros controladores con el comando <code>nest generate controller</code> y le pasamos el nombre del controlador que queremos crear.
+  ```bash
+  nest generate controller controllers/products --flat
+  ```
+  
+  ### Qué es la responsabilidad única
+
+  La S de SOLID hace referencia a “Single Responsibility” y recomienda que **cada pieza de software debe tener una única función.** Por ejemplo, un controlador de productos no debería encargarse de categorías o de usuarios. Se debe crear un controlador para cada entidad que la aplicación necesite.
+
+  Lo mismo ocurre con los métodos. Un método para la obtención de datos solo debe realizar dicha acción y no estar actualizando o manipulando los datos de otra manera.
+
+  **Responsabilidades en NestJS**
+
+  En NestJS, una buena práctica es crear un directorio llamado <code>controllers</code> donde se agruparán todos los controladores que tu aplicación necesite. Ese ya es un buen paso para mantener el orden en tu proyecto.
+  Apóyate del CLI de NestJS para autogenerar código rápidamente con el comando <code>nest generate controller</code>n o en su forma corta <code>nest g co</code>.
+  Es una buena forma de comenzar a seguir las buenas prácticas a la hora de escribir código y estructurar una aplicación.
+
+  **Controllers y responsabilidades**
+
+  ```bash
+  nest g cor controllers/categories --flat
+  ```
+  src/controllers/categories.controller.ts
+  ```typescript
+  import { Controller, Get, Param } from '@nestjs/common';
+
+  @Controller('categories') // 👈 Route
+  export class CategoriesController {
+
+    @Get(':id/products/:productId')
+    getCategory(
+      @Param('productId') productId: string,
+      @Param('id') id: string
+    ) {
+      return `product ${productId} and ${id}`;
+    }
+  }
+  ```
+  ```bash
+  nest g co controllers/products --flat
+  ```
+  src/controllers/products.controller.ts
+  ```typescript
+  import { Controller, Get, Query, Param } from '@nestjs/common';
+
+  @Controller('products') // 👈 Route
+  export class ProductsController {
+    @Get()
+    getProducts(
+      @Query('limit') limit = 100,
+      @Query('offset') offset = 0,
+      @Query('brand') brand: string,
+    ) {
+      return `products limit=> ${limit} offset=> ${offset} brand=> ${brand}`;
+    }
+
+    @Get('filter')
+    getProductFilter() {
+      return `yo soy un filter`;
+    }
+
+    @Get(':productId')
+    getProduct(@Param('productId') productId: string) {
+      return `product ${productId}`;
+    }
+  }
+  ```
+  src/app.module.ts
+  ```typescript
+  import { Module } from '@nestjs/common';
+  import { AppController } from './app.controller';
+  import { AppService } from './app.service';
+  import { ProductsController } from './controllers/products.controller';
+  import { CategoriesController } from './controllers/categories.controller';
+
+  @Module({
+    imports: [],
+    controllers: [
+    AppController,
+    ProductsController, // 👈 New controller
+    CategoriesController  // 👈 New controller
+    ],
+    providers: [AppService],
+  })
+  export class AppModule {}
+  ```
 
