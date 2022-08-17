@@ -656,3 +656,116 @@ Curso de Backend con NestJS
   - [Con imágenes de perritos 🐶](https://httpstatusdogs.com/)
   - [Con imágenes de gatitos 🐱](https://http.cat/)
   - [HTTP response status codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
+
+## Introducción a servicios: crea tu primer servicio
+  Puedes crear los servicios usando el generador de Nest CLI con
+  ```bash
+  nest g s services/products --flat
+  ```
+  Los servicios en NestJS son los que suelen tener la lógica del negocio y la conexión con la base de datos.
+
+  ### Qué son los servicios en NestJS
+  Los servicios son una pieza esencial de las aplicaciones realizadas con el framework NestJS. Están pensados para proporcionar una capa de acceso a los datos que necesitan las aplicaciones para funcionar.
+
+  Un servicio tiene la responsabilidad de gestionar el trabajo con los datos de la aplicación, de modo que realiza las operaciones para obtener esos datos, modificarlos, etc.
+
+  Primer servicio con NestJS
+
+  Para crear un servicio puedes utilizar el comando <code>nest generate service "service name"</code> o en su forma corta <code>nest g s "service name"</code>.
+  ```typescript
+  // app.service.ts
+  import { Injectable } from '@nestjs/common';
+
+  @Injectable()
+  export class AppService {
+
+    getHello(): string {
+      return 'Hello World!';
+    }
+  }
+  ```
+  Los servicios utilizan el decorador <code>@Injectable()</code> y deben ser importados en los providers del módulo al que pertenecen o tu aplicación no lo reconocerá y tendrás errores al levantar el servidor.
+  ```typescript
+  // app.module.ts
+  import { Module } from '@nestjs/common';
+  import { AppService } from './app.service';
+
+  @Module({
+    imports: [],
+    providers: [
+      // Imports de Servicios
+      AppService
+    ],
+  })
+  export class AppModule {}
+  ```
+  Crea un método en el servicio para cada propósito que necesites. Uno para obtener un producto, otro para obtener un listado de productos. Uno para crear producto, para actualizar, eliminar, etc.
+
+  ***Servicios en NestJS**
+
+  ```typescript
+  // src/entities/product.entity.ts
+
+  export class Product {
+    id: number;
+    name: string;
+    description: string;
+    price: number;
+    stock: number;
+    image: string;
+  }
+  ```
+  nest g s services/products --flat
+  ```typescript
+  // src/services/products.service.ts
+  import { Injectable } from '@nestjs/common';
+
+  import { Product } from './../entities/product.entity';
+
+  @Injectable()
+  export class ProductsService {
+    private counterId = 1;
+    private products: Product[] = [
+      {
+        id: 1,
+        name: 'Product 1',
+        description: 'bla bla',
+        price: 122,
+        image: '',
+        stock: 12,
+      },
+    ];
+
+    findAll() {
+      return this.products;
+    }
+
+    findOne(id: number) {
+      return this.products.find((item) => item.id === id);
+    }
+
+    create(payload: any) {
+      this.counterId = this.counterId + 1;
+      const newProduct = {
+        id: this.counterId,
+        ...payload,
+      };
+      this.products.push(newProduct);
+      return newProduct;
+    }
+  }
+  ```
+  ```typescript
+  // src/app.module.ts
+  import { Module } from '@nestjs/common';
+  ...
+  import { ProductsService } from './services/products.service';
+
+  @Module({
+    imports: [],
+    controllers: [...],
+    providers: [AppService, ProductsService], // 👈 New Service
+  })
+  export class AppModule {}
+  ```
+
