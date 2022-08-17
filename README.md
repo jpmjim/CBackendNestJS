@@ -596,3 +596,63 @@ Curso de Backend con NestJS
     }
   }
   ```
+
+## Códigos de estado o HTTP response status codes
+  El protocolo HTTP tiene estandarizado una lista de códigos de estado que indican los tipos de respuesta que las API deben enviar dependiendo la situación. Como profesional en el desarrollo de software, debes conocerlos y diferenciarlos.
+
+  ### Cuáles son los códigos HTTP
+  Hay cinco familias de códigos de estado HTTP que tienes que utilizar apropiadamente para que tus APIs informen correctamente la situación de la solicitud.
+
+  - Estados informativos (100–199)
+  - Estados de éxito (200–299)
+  - Estados de redirección (300–399)
+  - Estados de error del cliente (400–499)
+  - Estados de error del servidor (500–599)
+
+  ### Cómo manejar los códigos de estado HTTP con NestJS
+  En NestJS, puedes manejar los códigos de estado HTTP importando el decorador **HttpCode** y el enumerado **HttpStatus** desde <code>@nestjs/common</code>.
+
+  El primero te servirá para indicar cuál será el código de estado HTTP que un endpoint tiene que devolver; el segundo para ayudarte por si no recuerdas qué código pertenece a cada tipo de respuesta.
+
+  ```typescript
+  import { Controller, HttpCode, HttpStatus } from '@nestjs/common';
+
+  @Get('product/:idProduct')
+  @HttpCode(HttpStatus.OK)
+  getProduct2(@Param('idProduct') idProduct: string): string {
+      return `Producto id: ${idProduct}`;
+  }
+
+  @Post('product')
+  @HttpCode(HttpStatus.CREATED)
+  createProducto(@Body() body: any): any {
+      return {
+        name: body.name,
+        price: body.price
+      };
+  }
+  ```
+  El enumerado <code>HttpStatus.OK</code> indica código de estado **200** que es el que suele devolver por defecto todos los endpoints cuando la operación sale exitosamente. Los endpoints POST suelen devolver <code>HttpStatus.CREATED</code> o código **201** para indicar la creación exitosa del registro.
+
+  src/controllers/products.controller.ts
+  ```typescript
+  import { ..., HttpStatus, HttpCode, Res } from '@nestjs/common';
+  import { Response } from 'express';
+
+  @Controller('products')
+  export class ProductsController {
+    ...
+    @Get(':productId')
+    @HttpCode(HttpStatus.ACCEPTED) // 👈 Using decorator
+    getOne(
+      @Res() response: Response,
+      @Param('productId') productId: string
+    ) {
+      response.status(200).send({...}); // 👈 Using express directly
+    }
+  }
+  ```
+  Resumen de los códigos HTTP
+  - [Con imágenes de perritos 🐶](https://httpstatusdogs.com/)
+  - [Con imágenes de gatitos 🐱](https://http.cat/)
+  - [HTTP response status codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)

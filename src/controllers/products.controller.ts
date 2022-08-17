@@ -7,7 +7,12 @@ import {
   Body,
   Put,
   Delete,
+  HttpStatus,
+  HttpCode,
+  //Res,
 } from '@nestjs/common';
+
+// import { Response } from 'express';
 
 @Controller('products')
 export class ProductsController {
@@ -28,10 +33,22 @@ export class ProductsController {
   }
 
   //rutas dinamicas
+  //con decorador de nextjs mas recomendado
   @Get(':productId')
-  getProduct(@Param('productId') productId: string) {
-    return `product ${productId}`;
+  @HttpCode(HttpStatus.ACCEPTED)
+  getOne(@Param('productId') productId: string) {
+    return {
+      message: `product ${productId}`,
+    };
   }
+
+  //responde status de express con decorador @Res
+  // @Get(':productId')
+  // getOne(@Res() response: Response, @Param('productId') productId: string) {
+  //   response.status(200).send({
+  //     message: `product ${productId}`,
+  //   });
+  // }
 
   // enviar datos por el body
   @Post()
