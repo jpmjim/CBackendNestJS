@@ -934,3 +934,38 @@ Curso de Backend con NestJS
     return this.productsService.remove(+id);
   }
   ```
+
+## Introducción a pipes: usa tu primer pipe
+  NestJS utiliza el concepto de [PIPES](https://docs.nestjs.com/pipes#built-in-pipes) para la validación y transformación de los datos antes del ingreso de estos a un controlador.
+
+  Los pipes tienen dos funciones principales validar y transformar. En este caso vamos a usar un pipe para validar que el ID que se envía en la URL sea un número.
+
+  ### Casos de uso de PIPES
+  Los pipes tienen dos casos de uso típicos:
+  - Transformación: transforma los datos de entrada a la forma deseada (por ejemplo, de cadena a entero).
+  - Validación: evalúa los datos de entrada y, si son válidos, simplemente los pasa sin cambios; de lo contrario, lanza una excepción cuando los datos son incorrectos.
+
+  ### Implementando tu primer PIPE
+  NestJS ya trae consigo una serie de pipes que puedes utilizar para la manipulación de datos. Impórtalos desde <code>@nestjs/common</code> y úsalos de la siguiente manera.
+  ```typescript
+  import { ParseIntPipe } from '@nestjs/common';
+
+  @Get('product/:idProduct')
+  getProduct(@Param('idProduct', ParseIntPipe) idProduct: string): string {
+      // ...
+  }
+  ```
+  El pipe ParseIntPipe, agrégalo como segundo parámetro del decorador <code>Param</code> para transformar el parámetro <code></code>idProduct y asegurar que este sea un número entero.
+
+  De no serlo, arrojará un error y al mismo tiempo estás protegiendo tu aplicación de datos erróneos o maliciosos.
+
+  Explora todos los PIPES que NestJS ya tiene preparados para ti.
+  ```typescript
+  // src/controllers/products.controller.ts
+  import {..., ParseIntPipe} from '@nestjs/common';
+
+  @Get(':id')
+  get(@Param('id', ParseIntPipe) id: number) {
+    return this.productsService.findOne(id);
+  }
+  ```
