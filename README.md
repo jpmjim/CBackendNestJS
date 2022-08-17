@@ -484,3 +484,48 @@ Curso de Backend con NestJS
   # Fedora
   sudo yam install postman
   ```
+
+## Qué es el método POST
+  Así como el verbo HTTP GET se utiliza para la obtención de datos, el verbo HTTP Post se utiliza para la creación de los mismos previamente.
+
+  **Qué es el método Post**
+
+  Es el método para creación de datos. Para utilizarlo en Nest.js debemos importar el decorador.
+
+  ### Crear registro con Post
+  En tu proyecto NestJS, tienes que importar los decoradores <code>Post y Body</code> desde <code>@nestjs/common</code>. El primero para indicar que el endpoint es del tipo POST y el segundo para capturar los datos provenientes del front-end en el cuerpo del mensaje.
+
+  ```typescript
+  import { Controller, Post, Body } from '@nestjs/common';
+
+  @Controller()
+  export class AppController {
+
+    @Post('product')
+    createProducto(@Body() body: any): any {
+      return {
+        name: body.name,
+        price: body.price
+      };
+    }
+  }
+  ```
+  Un buen endpoint del tipo POST tiene que devolver el registro completo recientemente insertado en la BBDD para que el front-end pueda actualizarse inmediatamente y no tener que realizar una consulta por el mismo.
+
+  Recuerda también que, al tratarse de un endpoint POST, no puedes realizar la solicitud desde el navegador al igual que con los endpoints GET. Para probar tu aplicación, tienes que utilizar una plataforma de APIs como Postman.
+  ```typescript
+  import { ..., Post, Body } from '@nestjs/common';
+
+  @Controller('products')
+  export class ProductsController {
+    ...
+
+    @Post() // 👈 New decorator
+    create(@Body() payload: any) {
+      return {
+        message: 'accion de crear',
+        payload,
+      };
+    }
+  }
+  ```
