@@ -969,3 +969,82 @@ Curso de Backend con NestJS
     return this.productsService.findOne(id);
   }
   ```
+
+## Crea tu propio pipe
+  Crear tus propias validaciones de datos será muy importante para segurizar tu aplicación y evitar errores inesperados.
+
+  Puedes crear tus propios pipes para crear validaciones y transformaciones personalizadas.
+
+  ### Cómo crear custom PIPES
+  Crea tu propio PIPE para implementar lógica custom de validación de datos.
+
+  **1. Crea tu primer Pipe**
+
+  Con el CLI de NestJS autogenera un nuevo pipe con el comando <code>nest generate pipe "pipe-name"</code> o en su forma corta <code>nest g p "pipe-name"</code>.
+  Por defecto, verás un código como el siguiente.
+  ```typescript
+  import { ArgumentMetadata, Injectable, PipeTransform } from '@nestjs/common';
+
+  @Injectable()
+  export class ParseIntPipe implements PipeTransform {
+
+    transform(value: any, metadata: ArgumentMetadata) {
+      return value;
+    }
+  }
+  ```
+  **2. Implementa tu lógica de validación**
+
+  Implementa aquí tu propia lógica de transformación y validación de datos. Ten en cuenta que si los datos no son válidos, puedes arrojar excepciones para informarle al front-end que los datos son erróneos.
+  ```typescript
+  import { ArgumentMetadata, Injectable, PipeTransform, BadRequestException } from '@nestjs/common';
+
+  @Injectable()
+  export class ParseIntPipe implements PipeTransform {
+
+    transform(value: string, metadata: ArgumentMetadata) {
+      const finalValue = parseInt(value, 10);
+      if (isNaN(finalValue)) {
+        throw new BadRequestException(`${value} no es un número.`);
+      }
+      return finalValue;
+    }
+  }
+  ```
+  **3. Utiliza tu Pipe**
+
+  Finalmente, implementa tu custom PIPE en el controlador.
+  ```typescript
+  import { ParseIntPipe } from './pipes/parse-int.pipe';
+
+  @Get('product/:idProduct')
+  getProduct(@Param('idProduct', ParseIntPipe) idProduct: string): string {
+      // ...
+  }
+  ```
+  Puedes desarrollar la lógica para validar y transformar los datos que más se adecue a tus necesidades. Es fundamental no permitir el ingreso de datos erróneos a tus controladores. Por eso, los pipes son una capa previa a los controladores para realizar esta validación.
+
+  ### Generar un pipe con <code>nest g pi common/parse-int</code>
+  ```typescript
+  // src/common/parse-int.pipe.ts
+
+  import {
+    ArgumentMetadata,
+    Injectable,
+    PipeTransform,
+    BadRequestException,
+  } from '@nestjs/common';
+
+  @Injectable()
+  export class ParseIntPipe implements PipeTransform {
+    transform(value: string, metadata: ArgumentMetadata) {
+      const val = parseInt(value, 10);
+      if (isNaN(val)) {
+        throw new BadRequestException(`${value} is not an number`);
+      }
+      return val;
+    }
+  }
+  ```
+
+
