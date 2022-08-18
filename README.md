@@ -1266,3 +1266,41 @@ Curso de Backend con NestJS
   }
   bootstrap();
   ```
+
+## Cómo evitar parámetros incorrectos
+  Los DTO ayudan con el tipado y la validación de datos, además de indicar la obligatoriedad de los mismos para que los registros se creen completos. Es importante también evitar que haya datos que no deben estar en las solicitudes, ya que podrían ser ataques maliciosos.
+
+  ### Cómo hacer la prohibición de datos
+  Busca el archivo <code>main.ts</code> que contiene el bootstrap de tu aplicación, es decir, el punto inicial de la misma. Agrega aquí la siguiente configuración.
+  ```typescript
+  // main.ts
+  import { NestFactory } from '@nestjs/core';
+  import { ValidationPipe } from '@nestjs/common';
+  import { AppModule } from './app.module';
+
+  async function bootstrap() {
+    const app = await NestFactory.create(AppModule);
+    app.useGlobalPipes(
+      new ValidationPipe({
+        whitelist: true,                    // Ignorar datos que no esten en los DTO
+        forbidNonWhitelisted: true,         // Lanzar error si existen datos prohibidos
+        disableErrorMessages: true,         // Desabilitar mensajes de error (producción)
+      })
+    );
+    await app.listen(process.env.PORT || 3000);
+  }
+  bootstrap();
+  ```
+  Importa **ValidationPipe** desde <code>@nestjs/common</code> y configura en true las propiedades <code>whitelist</code> para ignorar datos que no estén en el DTO. Usa <code>forbidNonWhitelisted</code> para lanzar errores si existen datos prohibidos y <code>disableErrorMessages</code> que es recomendable activarlo solo en producción para no enviar mensajes de error y no dar información al front-end.
+
+  De esta simple manera, tus endpoints gracias a los DTO son súper profesionales, seguros y contribuyen a una buena experiencia de desarrollo.
+  ```typescript
+  // src/main.ts
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+    }),
+  );
+  ```
