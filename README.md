@@ -1047,4 +1047,86 @@ Curso de Backend con NestJS
   }
   ```
 
+## Creando Data Transfers Objects
+  NestJS utiliza el concepto de Objetos de Transferencia de Datos, o simplemente abreviado como DTO, para el tipado de datos y su segurización.
 
+  ### Qué son objetos de transferencia de datos o data transfers objects
+  Los DTO no son más que clases customizadas que tu mismo puedes crear para indicar la estructura que tendrán los objetos de entrada en una solicitud.
+
+  **1. Creando DTO**
+
+  Crea un nuevo archivo que por lo general lleva como extensión <code>.dto.ts</code> para indicar que se trata de un DTO.
+  ```typescript
+  // products.dto.ts
+  export class CreateProductDTO {
+    readonly name: string;
+    readonly description: string;
+    readonly price: number;
+    readonly image: string;
+  }
+  ```
+  La palabra reservada **readonly** es propia de TypeScript y nos asegura que dichos datos no sean modificados.
+
+  Crea tantos atributos como tu clase CreateProductDTO necesite para dar de alta un nuevo producto.
+
+  **2. Importando DTO**
+
+  Importa la clase en tu controlador para tipar el Body del endpoint POST para la creación de un producto.
+  ```typescript
+  import { CreateProductDTO } from 'products.dto.ts';
+
+  @Post('product')
+  createProducto(@Body() body: CreateProductDTO): any {
+      // ...
+  }
+  ```
+  De esta forma, ya conoces la estructura de datos que tendrá el parámetro body previo a la creación de un producto.
+
+  **SRC: DTOS**
+  ```typescript
+  // src/dtos/products.dtos.ts
+  export class CreateProductDto {
+    readonly name: string;
+    readonly description: string;
+    readonly price: number;
+    readonly stock: number;
+    readonly image: string;
+  }
+
+  export class UpdateProductDto {
+    readonly name?: string;
+    readonly description?: string;
+    readonly price?: number;
+    readonly stock?: number;
+    readonly image?: string;
+  }
+  ```
+  ```typescript
+  // src/controllers/products.controller.ts
+  export class ProductsController {
+    @Post()
+    create(@Body() payload: CreateProductDto) { // 👈 Dto
+      ...
+    }
+
+    @Put(':id')
+    update(
+      @Param('id') id: string,
+      @Body() payload: UpdateProductDto  // 👈 Dto
+    ) { 
+    ...
+    }
+  }
+  ```
+  ```typescript
+  // src/services/products.service.ts
+  export class ProductsService {
+    create(payload: CreateProductDto) { // 👈 Dto
+      ...
+    }
+    update(id: number, payload: UpdateProductDto) { // 👈 Dto
+      ...	
+    }
+  }
+  ```
+  
