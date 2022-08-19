@@ -1304,3 +1304,40 @@ Curso de Backend con NestJS
     }),
   );
   ```
+
+## Reto: controladores y servicios restantes
+  Ya tienes todas las bases y hemos avanzado en el proyecto. Ahora llego la hora del RETO y este será hacer los demás controladores, así es debes crear los controladores, DTOs y servicios para:
+
+  - Products
+  - Categories
+  - Brands
+  - Users
+  - Customers
+
+  Sin embargo en esta lectura vamos a ver como quedaría, y finalmente deberías haber terminado con una AppModule parecido a este:
+  ```typescript
+  ...
+
+  @Module({
+    imports: [],
+    controllers: [
+      AppController,
+      ProductsController, // 👈
+      CategoriesController, // 👈
+      BrandsController,  // 👈
+      CustomerController,  // 👈
+      UsersController,  // 👈
+    ],
+    providers: [
+      AppService,
+      ProductsService,  // 👈
+      CategoriesService,  // 👈
+      BrandsService,  // 👈
+      CustomersService,  // 👈
+      UsersService,  // 👈
+    ],
+  })
+  export class AppModule {}
+  ```
+  Debes haber terminado con los controladores para Products, Categories, Brands, Users y Customers con sus servicios, entidades y DTOs respectivos, una vista general sería así:
+  ![](https://i.imgur.com/hAdFOZV.png)
